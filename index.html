@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pyodide Game</title>
+    <!-- PyScript -->
+    <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
+    <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+</head>
+<body>
+    <h1>Juego con Pyodide</h1>
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <py-script>
+        from js import document
+
+        def draw_game():
+            canvas = document.getElementById("gameCanvas")
+            context = canvas.getContext("2d")
+            context.fillStyle = "blue"
+            context.fillRect(100, 100, 200, 200)
+        
+        draw_game()
+    </py-script>
+</body>
+</html>
