@@ -27,8 +27,10 @@ def nombres_carpetas(directorio):
 pygame.init()
 pygame.mixer.init()
 
-ventana = pygame.display.set_mode((constantes.ANCHO_VENTANA,
-                                   constantes.ALTO_VENTANA))
+info_pantalla = pygame.display.Info()
+constantes.ANCHO_VENTANA = info_pantalla.current_w
+constantes.ALTO_VENTANA = info_pantalla.current_h
+ventana = pygame.display.set_mode((constantes.ANCHO_VENTANA, constantes.ALTO_VENTANA), pygame.RESIZABLE)
 pygame.display.set_caption("Mi primer juego")
 
 #variables
@@ -41,6 +43,25 @@ font_game_over = pygame.font.Font("assets/fonts/mago3.ttf", 100)
 font_reinicio = pygame.font.Font("assets/fonts/mago3.ttf", 30)
 font_inicio = pygame.font.Font("assets/fonts/mago3.ttf", 30)
 font_titulo = pygame.font.Font("assets/fonts/mago3.ttf", 75)
+font_mensaje = pygame.font.Font("assets/fonts/mago3.ttf", 36)
+
+
+# Ejemplo de árbol de decisiones para diálogos
+dialogos = {
+    "inicio": {
+        "pregunta": "¿Qué deseas hacer?",
+        "opciones": {
+            "explorar": "Explora el mundo a tu alrededor.",
+            "hablar": {
+                "pregunta": "¿Con quién deseas hablar?",
+                "opciones": {
+                    "NPC1": "El NPC1 te habla sobre la historia local.",
+                    "NPC2": "El NPC2 te da una pista para tu misión."
+                }
+            }
+        }
+    }
+}
 
 
 
@@ -181,6 +202,11 @@ def dibujar_grid():
         pygame.draw.line(ventana, constantes.BLANCO, (x*constantes.TILE_SIZE, 0), (x*constantes.TILE_SIZE, constantes.ALTO_VENTANA))
         pygame.draw.line(ventana, constantes.BLANCO, (0, x * constantes.TILE_SIZE), (constantes.ANCHO_VENTANA, x* constantes.TILE_SIZE))
 
+def mostrar_mensaje(ventana, texto, fuente, color, y_offset=0):
+    img = fuente.render(texto, True, color)
+    x = (constantes.ANCHO_VENTANA - img.get_width()) // 2
+    y = (constantes.ALTO_VENTANA - img.get_height()) // 2 + y_offset
+    ventana.blit(img, (x, y))
 
 #crear un jugador de la clase personaje
 jugador = Personaje(50,50, animaciones, 20, 1)
@@ -227,10 +253,15 @@ pygame.mixer.music.play(-1)
 sonido_disparo = pygame.mixer.Sound("assets/sounds/disparo.mp3")
 
 mostrar_inicio = True
+inicio_tiempo = pygame.time.get_ticks()
 run = True
 while run == True:
     if mostrar_inicio:
         pantalla_inicio()
+        mostrar_mensaje(ventana, "¡Bienvenido al juego!", font_mensaje, constantes.BLANCO, 200)
+        mostrar_mensaje(ventana, "Usa las flechas AWSD para moverte.", font_mensaje, constantes.BLANCO, 250)
+        pygame.display.flip()
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
@@ -241,10 +272,12 @@ while run == True:
                     run = False
 
     else:
+        
         #que vaya a 60 FPS
         reloj.tick(constantes.FPS)
         ventana.fill(constantes.MORADO)
 
+        
 
         if jugador.vivo == True:
             #Calcular el movimiento del jugador
@@ -260,6 +293,7 @@ while run == True:
             if mover_abajo == True:
                 delta_y = constantes.VELOCIDAD
 
+            
             #mover al jugador
             posicion_pantalla, nivel_completado = jugador.movimiento(delta_x,delta_y, world.obstaculos_tiles,
                                                    world.exit_tile)
@@ -410,6 +444,13 @@ while run == True:
                         lista_enemigos.append(ene)
 
 
-        pygame.display.update()
+        pygame.display.flip()
+
+
+
 
 pygame.quit()
+
+
+
+
