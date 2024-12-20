@@ -47,18 +47,13 @@ class Mundo():
                     tile_data[0] = tile_list[22]
                 # Crear honguito
                 elif tile == 74:
-                    honguito = Personaje(image_x, image_y, animaciones_enemigos[1], 100, 2)
+                    honguito = Personaje(image_x, image_y, animaciones_enemigos[1], 200, 2)
                     self.lista_enemigo.append(honguito)
                     tile_data[0] = tile_list[22]
                 # Crear goblin
                 elif tile == 77:
-                    goblin = Personaje(image_x, image_y, animaciones_enemigos[0], 200, 2)
+                    goblin = Personaje(image_x, image_y, animaciones_enemigos[0], 300, 2)
                     self.lista_enemigo.append(goblin)
-                    tile_data[0] = tile_list[22]
-                #crear planeta
-                elif tile == 85:
-                    planeta=Personaje(image_x, image_y, animaciones_enemigos[3], 500, 2)
-                    self.lista_enemigo.append(planeta)
                     tile_data[0] = tile_list[22]
 
                 self.map_tiles.append(tile_data)
